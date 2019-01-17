@@ -1,4 +1,14 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { ApiService } from '../api.service';
+import {
+  FormControl,
+  FormGroupDirective,
+  FormBuilder,
+  FormGroup,
+  NgForm,
+  Validators
+} from '@angular/forms';
 
 @Component({
   selector: 'app-book-create',
@@ -7,9 +17,42 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BookCreateComponent implements OnInit {
 
-  constructor() { }
+  // Form Group variables
+  bookForm: FormGroup;
+  isbn: string='';
+  title: string='';
+  description: string='';
+  author: string='';
+  publisher: string='';
+  published_year: string='';
 
+  constructor(
+    private router: Router,
+    private api: ApiService,
+    private formBuilder: FormBuilder
+    ) { }
+
+  // Initial validation for each field of the form group
   ngOnInit() {
+    this.bookForm = this.formBuilder.group({
+      'isbn' : [null, Validators.required],
+      'title' : [null, Validators.required],
+      'description' : [null, Validators.required],
+      'author' : [null, Validators.required],
+      'publisher' : [null, Validators.required],
+      'published_year' : [null, Validators.required],
+    });
+  }
+
+  // Function to submit/POST book form.
+  onFormSubmit(form:NgForm) {
+    this.api.postBook(form)
+      .subscribe(res => {
+        let id = res['_id'];
+        this.router.navigate(['/book-details', id]);
+      }, (err) => {
+        console.log(err);
+      });
   }
 
 }
