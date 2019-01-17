@@ -14,6 +14,11 @@ export class BookDetailComponent implements OnInit {
 
   constructor(private route:ActivatedRoute, private api: ApiService) { }
 
+  // Call the getBookDetails function when the component is initiated
+  ngOnInit() {
+    this.getBookDetails(this.route.snapshot.params['id']);
+  }
+
   // Function to get book details from the API
   getBookDetails(id) {
     this.api.getBook(id)
@@ -21,11 +26,6 @@ export class BookDetailComponent implements OnInit {
         console.log(data);
         this.book = data;
       });
-  }
-
-  // Call the getBookDetails function when the component is initiated
-  ngOnInit() {
-    this.getBookDetails(this.route.snapshot.params['id']);
   }
 
 }

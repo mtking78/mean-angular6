@@ -58,10 +58,18 @@ export class ApiService {
     );
   }
 
-  updateBook(data): Observable<any> {
-    return this.http.put(apiUrl, data, httpOptions).pipe(
-      catchError(this.handleError)
-    );
+  // Function below throws error because src/app/book-edit.component.ts onFormSubmit function expects one argument but gets two.
+  // updateBook(data): Observable<any> {
+  //   return this.http.put(apiUrl, data, httpOptions).pipe(
+  //     catchError(this.handleError)
+  //   );
+  // }
+  updateBook(id: string, data): Observable<any> {
+    const url = `${apiUrl}/${id}`;
+    return this.http.put(url, data, httpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
   }
 
   deleteBook(id: string): Observable<{}> {
